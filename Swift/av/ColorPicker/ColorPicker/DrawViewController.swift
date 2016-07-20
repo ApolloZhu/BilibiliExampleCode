@@ -18,8 +18,11 @@ class DrawViewController: UIViewController {
         }
     }
 
-    var drawingColor = UIColor.black() {
-        willSet{
+    var drawingColor: UIColor {
+        get{
+            return canvas.drawingColor
+        }
+        set{
             canvas.drawingColor = newValue
         }
     }
@@ -51,6 +54,9 @@ class DrawViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: AnyObject?) {
         if let colorPickerViewController = segue.destinationViewController as? ColorPickerViewController{
             colorPickerViewController.value = drawingColor
+        }
+        if let rgbaViewController = segue.destinationViewController as? RGBAViewController{
+            rgbaViewController.value = drawingColor
         }
     }
     

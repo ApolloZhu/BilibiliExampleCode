@@ -14,11 +14,11 @@
 		523989711D3405C700506022 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5239896F1D3405C700506022 /* LaunchScreen.storyboard */; };
 		5239897B1D340BE800506022 /* ColorPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5239897A1D340BE800506022 /* ColorPickerViewController.swift */; };
 		52AEC4EB1D3AB1B5005EF6AC /* DrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52AEC4EA1D3AB1B5005EF6AC /* DrawView.swift */; };
-		52AEC4ED1D3AB1D0005EF6AC /* Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52AEC4EC1D3AB1D0005EF6AC /* Path.swift */; };
 		52AEC4F11D3AB75D005EF6AC /* TouchIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52AEC4F01D3AB75D005EF6AC /* TouchIndicator.swift */; };
 		52AEC4F41D3B0965005EF6AC /* PathManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52AEC4F31D3B0965005EF6AC /* PathManager.swift */; };
 		52B6DF781D342CD100B9513E /* HuePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B6DF771D342CD100B9513E /* HuePicker.swift */; };
 		52B6DF7A1D342D3B00B9513E /* ColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B6DF791D342D3B00B9513E /* ColorPicker.swift */; };
+		52E8108D1D3C6F1000A19810 /* RGBAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E8108C1D3C6F1000A19810 /* RGBAViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,11 +31,11 @@
 		523989721D3405C700506022 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5239897A1D340BE800506022 /* ColorPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPickerViewController.swift; sourceTree = "<group>"; };
 		52AEC4EA1D3AB1B5005EF6AC /* DrawView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawView.swift; sourceTree = "<group>"; };
-		52AEC4EC1D3AB1D0005EF6AC /* Path.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Path.swift; sourceTree = "<group>"; };
 		52AEC4F01D3AB75D005EF6AC /* TouchIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchIndicator.swift; sourceTree = "<group>"; };
 		52AEC4F31D3B0965005EF6AC /* PathManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PathManager.swift; sourceTree = "<group>"; };
 		52B6DF771D342CD100B9513E /* HuePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HuePicker.swift; sourceTree = "<group>"; };
 		52B6DF791D342D3B00B9513E /* ColorPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPicker.swift; sourceTree = "<group>"; };
+		52E8108C1D3C6F1000A19810 /* RGBAViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RGBAViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +70,7 @@
 			children = (
 				52AEC4F31D3B0965005EF6AC /* PathManager.swift */,
 				52AEC4F21D3AB9AB005EF6AC /* Draw */,
+				52E8108B1D3C6EE500A19810 /* RGBAPicker */,
 				525B90BF1D394CA0004691B6 /* ColorPicker */,
 				5239896A1D3405C700506022 /* Main.storyboard */,
 				525B90C01D394CD3004691B6 /* Supporting Files */,
@@ -104,9 +105,16 @@
 			children = (
 				523989681D3405C700506022 /* DrawViewController.swift */,
 				52AEC4EA1D3AB1B5005EF6AC /* DrawView.swift */,
-				52AEC4EC1D3AB1D0005EF6AC /* Path.swift */,
 			);
 			name = Draw;
+			sourceTree = "<group>";
+		};
+		52E8108B1D3C6EE500A19810 /* RGBAPicker */ = {
+			isa = PBXGroup;
+			children = (
+				52E8108C1D3C6F1000A19810 /* RGBAViewController.swift */,
+			);
+			name = RGBAPicker;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -184,9 +192,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				523989691D3405C700506022 /* DrawViewController.swift in Sources */,
-				52AEC4ED1D3AB1D0005EF6AC /* Path.swift in Sources */,
 				52B6DF781D342CD100B9513E /* HuePicker.swift in Sources */,
 				52AEC4EB1D3AB1B5005EF6AC /* DrawView.swift in Sources */,
+				52E8108D1D3C6F1000A19810 /* RGBAViewController.swift in Sources */,
 				52B6DF7A1D342D3B00B9513E /* ColorPicker.swift in Sources */,
 				523989671D3405C700506022 /* AppDelegate.swift in Sources */,
 				5239897B1D340BE800506022 /* ColorPickerViewController.swift in Sources */,

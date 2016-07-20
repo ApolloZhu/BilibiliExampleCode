@@ -7,13 +7,16 @@
 //
 
 import Foundation
+import UIKit
 
 class PathManager{
 
     static let shared = PathManager()
 
-    var paths = [Path]()
-    private var trash = [Path]()
+    private init(){}
+
+    var paths = [(path: UIBezierPath, color: UIColor)]()
+    private var trash = [(UIBezierPath, UIColor)]()
 
     func undo(){
         if !paths.isEmpty{
