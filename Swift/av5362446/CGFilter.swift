@@ -13,7 +13,7 @@ extension CGImage{
 }
 
 extension UIImage{
-    func new(with filter: (currentPixelARGB: [Double], x: Int, y: Int, width: Int, height: Int, evaluateFlag: (x: Int, y: Int, width: Int) -> Int, completeData: UnsafeMutablePointer<UInt8>) -> [Double]) -> UIImage{
+    func new(with filter: Filter) -> UIImage{
         let image = self.cgImage!
         let width = image.width
         let height = image.height
@@ -40,36 +40,69 @@ extension UIImage{
     }
 }
 
-class Filter{
-    func mono(currentPixelARGB: [Double], x: Int, y: Int, width: Int, height: Int, evaluateFlag: (x: Int, y: Int, width: Int) -> Int, completeData: UnsafeMutablePointer<UInt8>) -> [Double]{
-        let avg = (currentPixelARGB[1] + currentPixelARGB[2] + currentPixelARGB[3]) / 3
-        return [currentPixelARGB[0],avg, avg, avg]
-    }
+typealias Filter = (currentPixelARGB: [Double], x: Int, y: Int, width: Int, height: Int, evaluateFlag: (x: Int, y: Int, width: Int) -> Int, completeData: UnsafeMutablePointer<UInt8>) -> [Double]
 
-    func blur(currentPixelARGB: [Double], x: Int, y: Int, width: Int, height: Int, evaluateFlag: (x: Int, y: Int, width: Int) -> Int, completeData: UnsafeMutablePointer<UInt8>) -> [Double]{
-        var sumARGB = [0.0,0,0,0]
-        var pixelCount = 0.0
-        for i in x - 3..<x + 4{
-            for j in y-3..<y+4{
-                if i < 0 || j < 0 || i >= width || j >= height{
-                    continue
-                }
-                let flag = evaluateFlag(x: x, y: y, width: width)
-                for i in 1...3{
-                    sumARGB[i] += Double(completeData[flag + i])
-                }
-                pixelCount += 1
-            }
-        }
-        return [currentPixelARGB[0], sumARGB[1] / pixelCount, sumARGB[2] / pixelCount, sumARGB[3] / pixelCount]
-    }
-}
-
-/* MARK: Usage
-let image = UIImage(named: "swift.png")!
-let monoImage = image.new{ (currentPixelARGB, _, _, _, _, _, _) in
+let mono : Filter = { (currentPixelARGB, _, _, _, _, _, _) in
     let avg = (currentPixelARGB[1] + currentPixelARGB[2] + currentPixelARGB[3]) / 3
     return [currentPixelARGB[0],avg, avg, avg]
 }
-let bluredImage = image.new(with: Filter().blur)
+
+let blur: Filter = { (currentPixelARGB, x, y, width, height, evaluateFlag, completeData) in
+    var sumARGB = [0.0,0,0,0]
+    var pixelCount = 0.0
+    for i in x - 3..<x + 4{
+        for j in y-3..<y+4{
+            if i < 0 || j < 0 || i >= width || j >= height{
+                continue
+            }
+            let flag = evaluateFlag(x: x, y: y, width: width)
+            for i in 1...3{
+                sumARGB[i] += Double(completeData[flag + i])
+            }
+            pixelCount += 1
+        }
+    }
+    return [currentPixelARGB[0], sumARGB[1] / pixelCount, sumARGB[2] / pixelCount, sumARGB[3] / pixelCount]
+}
+
+//class FilterClass{
+//    func mono(currentPixelARGB: [Double], x: Int, y: Int, width: Int, height: Int, evaluateFlag: (x: Int, y: Int, width: Int) -> Int, completeData: UnsafeMutablePointer<UInt8>) -> [Double]{
+//        let avg = (currentPixelARGB[1] + currentPixelARGB[2] + currentPixelARGB[3]) / 3
+//        return [currentPixelARGB[0],avg, avg, avg]
+//    }
+//
+//    func blur(currentPixelARGB: [Double], x: Int, y: Int, width: Int, height: Int, evaluateFlag: (x: Int, y: Int, width: Int) -> Int, completeData: UnsafeMutablePointer<UInt8>) -> [Double]{
+//        var sumARGB = [0.0,0,0,0]
+//        var pixelCount = 0.0
+//        for i in x - 3..<x + 4{
+//            for j in y-3..<y+4{
+//                if i < 0 || j < 0 || i >= width || j >= height{
+//                    continue
+//                }
+//                let flag = evaluateFlag(x: x, y: y, width: width)
+//                for i in 1...3{
+//                    sumARGB[i] += Double(completeData[flag + i])
+//                }
+//                pixelCount += 1
+//            }
+//        }
+//        return [currentPixelARGB[0], sumARGB[1] / pixelCount, sumARGB[2] / pixelCount, sumARGB[3] / pixelCount]
+//    }
+//}
+
+
+/* MARK: Usage
+ let image = UIImage(named: "swift.png")!
+
+ // Closure
+ let image1 = image.new{ (currentPixelARGB, _, _, _, _, _, _) in
+ let avg = (currentPixelARGB[1] + currentPixelARGB[2] + currentPixelARGB[3]) / 3
+ return [currentPixelARGB[0],avg, avg, avg]
+ }
+
+ // Typealias
+ let image2 = image.new(with: mono)
+
+ // Function
+ let image3 = image.new(with: FilterClass().blur)
  */
