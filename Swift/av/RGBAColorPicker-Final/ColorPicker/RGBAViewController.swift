@@ -2,34 +2,33 @@
 //  RGBAViewController.swift
 //  ColorPicker
 //
-//  Created by Apollonian on 16/7/18.
-//  Copyright © 2016年 WWITDC. All rights reserved.
+//  Created by Apollonian on 7/24/16.
+//  Copyright © 2016 WWITDC. All rights reserved.
 //
 
 import UIKit
 
 class RGBAViewController: UIViewController {
 
-    override func prefersStatusBarHidden() -> Bool {
-        return true
-    }
+    @IBOutlet weak var preview: UIView!
 
-    var value: UIColor{
-        get{
-            return UIColor(red: r, green: g, blue: b, alpha: a)
-        }
-        set{
-            view?.backgroundColor = newValue
-            newValue.getRed(&r, green: &g, blue: &b, alpha: &a)
-        }
-    }
+    @IBOutlet weak var rLabel: UILabel!
+    @IBOutlet weak var gLabel: UILabel!
+    @IBOutlet weak var bLabel: UILabel!
+    @IBOutlet weak var aLabel: UILabel!
 
-    private var r: CGFloat = 0 {
+    @IBOutlet weak var rSlider: UISlider!
+    @IBOutlet weak var gSlider: UISlider!
+    @IBOutlet weak var bSlider: UISlider!
+    @IBOutlet weak var aSlider: UISlider!
+
+    private var r: CGFloat = 0{
         willSet{
             rLabel.text = "\(newValue * 255)"
             rSlider.setValue(Float(newValue), animated: true)
         }
     }
+
     private var g: CGFloat = 0 {
         willSet{
             gLabel.text = "\(newValue * 255)"
@@ -49,18 +48,18 @@ class RGBAViewController: UIViewController {
         }
     }
 
-    @IBOutlet weak var rLabel: UILabel!
-    @IBOutlet weak var gLabel: UILabel!
-    @IBOutlet weak var bLabel: UILabel!
-    @IBOutlet weak var aLabel: UILabel!
-
-    @IBOutlet weak var rSlider: UISlider!
-    @IBOutlet weak var gSlider: UISlider!
-    @IBOutlet weak var bSlider: UISlider!
-    @IBOutlet weak var aSlider: UISlider!
+    var value: UIColor{
+        get{
+            return UIColor(red: r, green: g, blue: b, alpha: a)
+        }
+        set{
+            newValue.getRed(&r, green: &g, blue: &b, alpha: &a)
+            preview.backgroundColor = newValue
+        }
+    }
 
     @IBAction func valueChanged(_ sender: UISlider) {
-        switch sender.tag{
+        switch  sender.tag {
         case 0:
             r = CGFloat(sender.value)
         case 1:
@@ -72,12 +71,18 @@ class RGBAViewController: UIViewController {
         default:
             break
         }
-        view.backgroundColor = value
+        preview.backgroundColor = value
     }
 
-    override func prepare(for segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let drawViewController = segue.destinationViewController as? DrawViewController{
-            drawViewController.drawingColor = value
-        }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        value = manager.lineColor
     }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        manager.lineColor = value
+    }
+
+
 }
