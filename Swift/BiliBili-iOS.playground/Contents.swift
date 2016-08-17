@@ -1,7 +1,14 @@
 import Foundation
 import UIKit
 
-// Mark: Generics?
+// MARK: Test String to Int
+/*
+let str = "23ANTHING2STRANGE1"
+let number = Int(str, radix: 26)
+number
+ */
+
+// MARK: Generics?
 /*extension Array{
     /// Should be abitious but not
     public mutating func append<C : Collection where C.Iterator.Element == Element>(_ newElement: C){
@@ -62,7 +69,7 @@ canvas.draw(using: (Brush() as Any))
 canvas.draw(using: canvas)
 canvas.draw(using: AnotherBrush())*/
 
-// Mark: URL
+// MARK: URL
 /*
 import Foundation
 let url = URL(string: "link")
