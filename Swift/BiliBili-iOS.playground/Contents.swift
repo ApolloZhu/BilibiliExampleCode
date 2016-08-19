@@ -1,6 +1,15 @@
 import Foundation
-import UIKit
+//import UIKit
 
+extension Double{
+    func isSimilar(to other: Double, accuracy: Int = 10) -> Bool{
+        return abs(self - other) < Double(pow(0.1, accuracy))
+    }
+}
+
+let d1 = 0.1+0.1+0.1+0.1+0.1+0.1+0.1+0.1+0.1+0.1
+let d2 = 1.0
+d1.isEqual(to: d2)
 // MARK: Test String to Int
 /*
 let str = "23ANTHING2STRANGE1"
