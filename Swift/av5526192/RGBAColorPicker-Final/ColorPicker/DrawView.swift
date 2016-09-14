@@ -3,11 +3,10 @@
 //  ColorPicker
 //
 //  Created by Apollonian on 7/22/16.
-//  Copyright © 2016 WWITDC. All rights reserved.
+//  Copyright © 2015-2016 WWITDC. All rights reserved.
 //
 
 import UIKit
-
 
 class DrawView: UIView {
 

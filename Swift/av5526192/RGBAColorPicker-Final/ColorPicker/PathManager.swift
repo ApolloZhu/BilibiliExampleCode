@@ -3,7 +3,7 @@
 //  ColorPicker
 //
 //  Created by Apollonian on 7/24/16.
-//  Copyright © 2016 WWITDC. All rights reserved.
+//  Copyright © 2015-2016 WWITDC. All rights reserved.
 //
 
 import UIKit

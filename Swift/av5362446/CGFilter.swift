@@ -20,7 +20,7 @@ extension UIImage{
         let context = image.bitmapContext
 
         let pixelData = context.data
-        let data = UnsafeMutablePointer<UInt8>(pixelData)!
+        let data = pixelData?.assumingMemoryBound(to: UInt8.self)
 
         for x in 0..<width{
             for y in 0..<height{
@@ -40,7 +40,7 @@ extension UIImage{
     }
 }
 
-typealias Filter = (currentPixelARGB: [Double], x: Int, y: Int, width: Int, height: Int, evaluateFlag: (x: Int, y: Int, width: Int) -> Int, completeData: UnsafeMutablePointer<UInt8>) -> [Double]
+typealias Filter = (_ currentPixelARGB: [Double], _ x: Int, _ y: Int, _ width: Int, _ height: Int, _ evaluateFlag: (_ x: Int, _ y: Int, _ width: Int) -> Int, _ completeData: UnsafeMutablePointer<UInt8>) -> [Double]
 
 let mono : Filter = { (currentPixelARGB, _, _, _, _, _, _) in
     let avg = (currentPixelARGB[1] + currentPixelARGB[2] + currentPixelARGB[3]) / 3
@@ -65,30 +65,31 @@ let blur: Filter = { (currentPixelARGB, x, y, width, height, evaluateFlag, compl
     return [currentPixelARGB[0], sumARGB[1] / pixelCount, sumARGB[2] / pixelCount, sumARGB[3] / pixelCount]
 }
 
-//class FilterClass{
-//    func mono(currentPixelARGB: [Double], x: Int, y: Int, width: Int, height: Int, evaluateFlag: (x: Int, y: Int, width: Int) -> Int, completeData: UnsafeMutablePointer<UInt8>) -> [Double]{
-//        let avg = (currentPixelARGB[1] + currentPixelARGB[2] + currentPixelARGB[3]) / 3
-//        return [currentPixelARGB[0],avg, avg, avg]
-//    }
-//
-//    func blur(currentPixelARGB: [Double], x: Int, y: Int, width: Int, height: Int, evaluateFlag: (x: Int, y: Int, width: Int) -> Int, completeData: UnsafeMutablePointer<UInt8>) -> [Double]{
-//        var sumARGB = [0.0,0,0,0]
-//        var pixelCount = 0.0
-//        for i in x - 3..<x + 4{
-//            for j in y-3..<y+4{
-//                if i < 0 || j < 0 || i >= width || j >= height{
-//                    continue
-//                }
-//                let flag = evaluateFlag(x: x, y: y, width: width)
-//                for i in 1...3{
-//                    sumARGB[i] += Double(completeData[flag + i])
-//                }
-//                pixelCount += 1
-//            }
-//        }
-//        return [currentPixelARGB[0], sumARGB[1] / pixelCount, sumARGB[2] / pixelCount, sumARGB[3] / pixelCount]
-//    }
-//}
+/* MARK: OOP Style
+class FilterClass{
+    func mono(currentPixelARGB: [Double], x: Int, y: Int, width: Int, height: Int, evaluateFlag: (_ x: Int, _ y: Int, _ width: Int) -> Int, completeData: UnsafeMutablePointer<UInt8>) -> [Double]{
+        let avg = (currentPixelARGB[1] + currentPixelARGB[2] + currentPixelARGB[3]) / 3
+        return [currentPixelARGB[0],avg, avg, avg]
+    }
+
+    func blur(currentPixelARGB: [Double], x: Int, y: Int, width: Int, height: Int, evaluateFlag: (_ x: Int, _ y: Int, _ width: Int) -> Int, completeData: UnsafeMutablePointer<UInt8>) -> [Double]{
+        var sumARGB = [0.0,0,0,0]
+        var pixelCount = 0.0
+        for i in x - 3..<x + 4{
+            for j in y-3..<y+4{
+                if i < 0 || j < 0 || i >= width || j >= height{
+                    continue
+                }
+                let flag = evaluateFlag(x: x, y: y, width: width)
+                for i in 1...3{
+                    sumARGB[i] += Double(completeData[flag + i])
+                }
+                pixelCount += 1
+            }
+        }
+        return [currentPixelARGB[0], sumARGB[1] / pixelCount, sumARGB[2] / pixelCount, sumARGB[3] / pixelCount]
+    }
+} */
 
 
 /* MARK: Usage
