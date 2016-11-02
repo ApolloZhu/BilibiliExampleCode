@@ -12,7 +12,7 @@ extension CGPoint{
     func fitting(in view: UIView) -> CGPoint{
         return fitting(in: view.bounds)
     }
-    func fitting(in rect: CGRect) -> CGPoint{
+    func fitting(in rect: CGRect) -> CGPoint {
         let fittingX = max(min(x, rect.maxX), rect.minX)
         let fittingY = max(min(y, rect.maxY), rect.minY)
         return CGPoint(x: fittingX, y: fittingY)
@@ -21,15 +21,29 @@ extension CGPoint{
 
 extension CGRect{
     public func intersetcs(_ point: CGPoint) -> Bool{
-        return self.minX <= point.x && self.maxX >= point.x &&  self.minY <= point.y && self.maxY >= point.y
+        return minX <= point.x && point.x <= maxX && minY <= point.y && point.y <= maxY
     }
+}
+
+enum TouchIndicatorType {
+    case `default`
+    case xOnly
+    case yOnly
 }
 
 @IBDesignable class TouchIndicator:UIView{
 
-    var radius: CGFloat{
-        return min(bounds.width, bounds.height) / 2
+    var radius: CGFloat {
+        get {
+            return min(bounds.width, bounds.height) / 2
+        }
+        set {
+            frame = CGRect(x: frame.midX - newValue, y: frame.midY - newValue, width: newValue * 2, height: newValue * 2)
+            layer.cornerRadius = newValue
+        }
     }
+
+    var type: TouchIndicatorType = .default
 
     override init(frame: CGRect) {
         if frame.size == .zero{
@@ -51,16 +65,16 @@ extension CGRect{
         layer.borderWidth = 1
         layer.cornerRadius = radius
         layer.masksToBounds = true
-        fit()
+        adjust()
     }
 
     func setCenter(to newCenter: CGPoint){
         setCenter(xTo: newCenter.x, yTo: newCenter.y)
     }
 
-    func fit(){
-        if let top = superview{
-            if !top.bounds.intersetcs(center){
+    func adjust(){
+        if let top = superview {
+            if !top.bounds.intersetcs(center) {
                 setCenter(to: center.fitting(in: top))
             }
         }
@@ -73,19 +87,16 @@ extension CGRect{
         if let y = newY {
             frame.origin.y = y - radius
         }
-        fit()
+        adjust()
     }
-
-
-//    func setRadius(to newRadius: CGFloat){
-//        frame = CGRect(x: frame.midX - newRadius, y: frame.midY - newRadius, width: newRadius * 2, height: newRadius * 2)
-//        layer.cornerRadius = newRadius
-//    }
-
 }
 
 class IndicatableUIControl: UIControl{
     let indicator = TouchIndicator()
+
+    var defaultIndicatorType: TouchIndicatorType {
+        return .default
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -99,6 +110,7 @@ class IndicatableUIControl: UIControl{
         super.didMoveToSuperview()
         addSubview(indicator)
         indicator.setCenter(to: center)
+        indicator.type = defaultIndicatorType
     }
 
     override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {

@@ -44,4 +44,7 @@ import UIKit
     override open class var layerClass: Swift.AnyClass {
         return HuePickerLayer.self
     }
+    override var defaultIndicatorType: TouchIndicatorType {
+        return .xOnly
+    }
 }
