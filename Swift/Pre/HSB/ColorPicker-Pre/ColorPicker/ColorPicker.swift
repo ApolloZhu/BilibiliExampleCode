@@ -21,8 +21,8 @@ import Foundation
     var value: UIColor{
         return UIColor(
             hue: hue,
-            saturation: convert(indicator.center, to: self).y / bounds.height,
-            brightness: convert(indicator.center, to: self).x / bounds.width,
+            saturation: convert(indicator!.center, to: self).y / bounds.height,
+            brightness: convert(indicator!.center, to: self).x / bounds.width,
             alpha: 1
         )
     }

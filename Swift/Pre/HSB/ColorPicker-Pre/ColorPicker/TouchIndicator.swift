@@ -43,10 +43,10 @@ enum TouchIndicatorType {
         }
     }
 
-    var type: TouchIndicatorType = .default
+    var type: TouchIndicatorType? = nil
 
     override init(frame: CGRect) {
-        if frame.size == .zero{
+        if frame.size == .zero {
             super.init(frame: CGRect(origin: frame.origin, size: CGSize(width: 20, height: 20)))
         } else {
             super.init(frame: frame)
@@ -72,12 +72,17 @@ enum TouchIndicatorType {
         setCenter(xTo: newCenter.x, yTo: newCenter.y)
     }
 
-    func adjust(){
-        if let top = superview {
-            if !top.bounds.intersetcs(center) {
-                setCenter(to: center.fitting(in: top))
-            }
+    func adjust() {
+        if let pred = isFittingInSuperview, !pred {
+            setCenter(to: center.fitting(in: superview!))
         }
+    }
+
+    var isFittingInSuperview : Bool? {
+        if let top = superview {
+            return top.bounds.intersetcs(center)
+        }
+        return nil
     }
 
     func setCenter(xTo newX: CGFloat? = nil, yTo newY: CGFloat? = nil){
@@ -92,7 +97,7 @@ enum TouchIndicatorType {
 }
 
 class IndicatableUIControl: UIControl{
-    let indicator = TouchIndicator()
+    var indicator: TouchIndicator?
 
     var defaultIndicatorType: TouchIndicatorType {
         return .default
@@ -106,11 +111,18 @@ class IndicatableUIControl: UIControl{
         super.init(coder: aDecoder)
     }
 
+    override func willMove(toSuperview newSuperview: UIView?) {
+        super.willMove(toSuperview: newSuperview)
+        if indicator == nil {
+            indicator = TouchIndicator()
+        }
+        addSubview(indicator!)
+        indicator!.setCenter(to: center)
+    }
+
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
-        addSubview(indicator)
-        indicator.setCenter(to: center)
-        indicator.type = defaultIndicatorType
+        indicator!.type = defaultIndicatorType
     }
 
     override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
@@ -134,7 +146,7 @@ class IndicatableUIControl: UIControl{
     }
 
     fileprivate func update(for touch: UITouch){
-        indicator.setCenter(to: touch.location(in: self))
+        indicator?.setCenter(to: touch.location(in: self))
         sendActions(for: .valueChanged)
     }
 }

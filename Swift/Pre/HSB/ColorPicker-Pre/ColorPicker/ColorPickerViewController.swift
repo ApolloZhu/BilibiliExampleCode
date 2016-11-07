@@ -35,8 +35,8 @@ class ColorPickerViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         value = manager.lineColor
-        huePicker.indicator.setCenter(xTo: hue * huePicker.bounds.width)
-        colorPicker.indicator.setCenter(to: CGPoint(x: saturation * colorPicker.bounds.height, y: brightness * colorPicker.bounds.width))
+        huePicker.indicator?.setCenter(xTo: hue * huePicker.bounds.width)
+        colorPicker.indicator?.setCenter(to: CGPoint(x: saturation * colorPicker.bounds.height, y: brightness * colorPicker.bounds.width))
         colorPicker.hue = hue
     }
 
