@@ -43,8 +43,6 @@ enum TouchIndicatorType {
         }
     }
 
-    var type: TouchIndicatorType? = nil
-
     override init(frame: CGRect) {
         if frame.size == .zero {
             super.init(frame: CGRect(origin: frame.origin, size: CGSize(width: 20, height: 20)))
@@ -97,11 +95,9 @@ enum TouchIndicatorType {
 }
 
 class IndicatableUIControl: UIControl{
-    var indicator: TouchIndicator?
+    var indicator = TouchIndicator()
 
-    var defaultIndicatorType: TouchIndicatorType {
-        return .default
-    }
+    var type: TouchIndicatorType { return .default }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -111,18 +107,10 @@ class IndicatableUIControl: UIControl{
         super.init(coder: aDecoder)
     }
 
-    override func willMove(toSuperview newSuperview: UIView?) {
-        super.willMove(toSuperview: newSuperview)
-        if indicator == nil {
-            indicator = TouchIndicator()
-        }
-        addSubview(indicator!)
-        indicator!.setCenter(to: center)
-    }
-
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
-        indicator!.type = defaultIndicatorType
+        addSubview(indicator)
+        indicator.setCenter(to: center)
     }
 
     override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
@@ -146,7 +134,15 @@ class IndicatableUIControl: UIControl{
     }
 
     fileprivate func update(for touch: UITouch){
-        indicator?.setCenter(to: touch.location(in: self))
+        let location = touch.location(in: self)
+        switch type {
+        case .xOnly:
+            indicator.setCenter(xTo: location.x, yTo: nil)
+        case .yOnly:
+            indicator.setCenter(xTo: nil, yTo: location.y)
+        default:
+            indicator.setCenter(to: location)
+        }
         sendActions(for: .valueChanged)
     }
 }

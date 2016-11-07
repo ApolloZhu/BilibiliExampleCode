@@ -38,13 +38,13 @@ import UIKit
 
 @IBDesignable class HuePicker: IndicatableUIControl{
     var value: CGFloat {
-        return convert(indicator!.center, to: self).x / bounds.width
+        return convert(indicator.center, to: self).x / bounds.width
     }
 
     override open class var layerClass: Swift.AnyClass {
         return HuePickerLayer.self
     }
-    override var defaultIndicatorType: TouchIndicatorType {
+    override var type: TouchIndicatorType {
         return .xOnly
     }
 }
