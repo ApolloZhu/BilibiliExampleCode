@@ -8,8 +8,8 @@
 
 import UIKit
 
-extension CGPoint{
-    func fitting(in view: UIView) -> CGPoint{
+extension CGPoint {
+    func fitting(in view: UIView) -> CGPoint {
         return fitting(in: view.bounds)
     }
     func fitting(in rect: CGRect) -> CGPoint {
@@ -19,9 +19,9 @@ extension CGPoint{
     }
 }
 
-extension CGRect{
-    public func intersetcs(_ point: CGPoint) -> Bool{
-        return minX <= point.x && point.x <= maxX && minY <= point.y && point.y <= maxY
+extension CGRect {
+    public func intersetcs(_ point: CGPoint) -> Bool {
+        return (minX...maxX).contains(point.x) && (minY...maxY).contains(point.y)
     }
 }
 
@@ -31,24 +31,9 @@ enum TouchIndicatorType {
     case yOnly
 }
 
-@IBDesignable class TouchIndicator:UIView{
-
-    var radius: CGFloat {
-        get {
-            return min(bounds.width, bounds.height) / 2
-        }
-        set {
-            frame = CGRect(x: frame.midX - newValue, y: frame.midY - newValue, width: newValue * 2, height: newValue * 2)
-            layer.cornerRadius = newValue
-        }
-    }
-
+@IBDesignable class TouchIndicator: UIView {
     override init(frame: CGRect) {
-        if frame.size == .zero {
-            super.init(frame: CGRect(origin: frame.origin, size: CGSize(width: 20, height: 20)))
-        } else {
-            super.init(frame: frame)
-        }
+        super.init(frame: frame)
         setup()
     }
 
@@ -57,22 +42,34 @@ enum TouchIndicatorType {
         setup()
     }
 
-    private func setup(){
+    private func setup() {
         backgroundColor = .white
         layer.borderColor = UIColor.black.cgColor
         layer.borderWidth = 1
-        layer.cornerRadius = radius
         layer.masksToBounds = true
-        adjust()
+        radius = radius <= 0 ? 10 : radius
     }
 
-    func setCenter(to newCenter: CGPoint){
-        setCenter(xTo: newCenter.x, yTo: newCenter.y)
+    var radius: CGFloat {
+        get {
+            return min(bounds.width, bounds.height) / 2
+        }
+        set {
+            let newRadius = abs(newValue)
+            bounds = CGRect(
+                x: bounds.midX - newRadius,
+                y: bounds.midY - newRadius,
+                width: newRadius * 2,
+                height: newRadius * 2
+            )
+            layer.cornerRadius = newRadius
+            adjust()
+        }
     }
 
     func adjust() {
-        if let pred = isFittingInSuperview, !pred {
-            setCenter(to: center.fitting(in: superview!))
+        if let isFittingInSuperview = isFittingInSuperview, !isFittingInSuperview {
+            setCenterTo(center.fitting(in: superview!))
         }
     }
 
@@ -83,7 +80,11 @@ enum TouchIndicatorType {
         return nil
     }
 
-    func setCenter(xTo newX: CGFloat? = nil, yTo newY: CGFloat? = nil){
+    func setCenterTo(_ newCenter: CGPoint) {
+        setCenterTo(x: newCenter.x, y: newCenter.y)
+    }
+
+    func setCenterTo(x newX: CGFloat? = nil, y newY: CGFloat? = nil) {
         if let x = newX {
             frame.origin.x = x - radius
         }
@@ -99,18 +100,10 @@ class IndicatableUIControl: UIControl{
 
     var type: TouchIndicatorType { return .default }
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
         addSubview(indicator)
-        indicator.setCenter(to: center)
+        indicator.setCenterTo(x: bounds.midX, y: bounds.midY)
     }
 
     override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
@@ -137,11 +130,11 @@ class IndicatableUIControl: UIControl{
         let location = touch.location(in: self)
         switch type {
         case .xOnly:
-            indicator.setCenter(xTo: location.x, yTo: nil)
+            indicator.setCenterTo(x: location.x)
         case .yOnly:
-            indicator.setCenter(xTo: nil, yTo: location.y)
+            indicator.setCenterTo(y: location.y)
         default:
-            indicator.setCenter(to: location)
+            indicator.setCenterTo(location)
         }
         sendActions(for: .valueChanged)
     }
