@@ -8,8 +8,7 @@
 
 import UIKit
 
-@IBDesignable class HuePickerLayer:CAGradientLayer{
-
+@IBDesignable class HuePickerLayer:CAGradientLayer {
     override init() {
         super.init()
         setup()
@@ -25,7 +24,7 @@ import UIKit
         setup()
     }
 
-    private func setup(){
+    private func setup() {
         var stops = [Double]()
         stops.append(contentsOf: stride(from: 0, through: 1, by: 0.1))
         self.locations = stops as [NSNumber]?
@@ -36,15 +35,10 @@ import UIKit
     }
 }
 
-@IBDesignable class HuePicker: IndicatableUIControl{
-    var value: CGFloat {
-        return convert(indicator.center, to: self).x / bounds.width
-    }
+@IBDesignable class HuePicker: IndicatableUIControl {
+    override open class var layerClass: Swift.AnyClass { return HuePickerLayer.self }
 
-    override open class var layerClass: Swift.AnyClass {
-        return HuePickerLayer.self
-    }
-    override var type: TouchIndicatorType {
-        return .xOnly
-    }
+    var value: CGFloat { return convert(indicator.center, to: self).x / bounds.width }
+
+    override var type: TouchIndicatorType { return .xOnly }
 }

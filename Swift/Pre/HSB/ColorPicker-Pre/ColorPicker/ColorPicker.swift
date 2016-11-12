@@ -9,16 +9,16 @@
 import UIKit
 import Foundation
 
-@IBDesignable class ColorPicker: IndicatableUIControl{
+@IBDesignable class ColorPicker: IndicatableUIControl {
 
-    var hue: CGFloat = 0{
+    var hue: CGFloat = 0 {
         didSet{
             setNeedsDisplay()
             sendActions(for: .valueChanged)
         }
     }
 
-    var value: UIColor{
+    var value: UIColor {
         return UIColor(
             hue: hue,
             saturation: convert(indicator.center, to: self).y / bounds.height,
@@ -34,7 +34,7 @@ import Foundation
         let period = Int(bounds.height)
         let stops: [CGFloat] = [0.0, 1.0]
 
-        for i in 0..<period{
+        for i in 0..<period {
 
             let saturation = CGFloat(i)/CGFloat(period)
             let colors = stops.map { UIColor(hue: hue, saturation: saturation, brightness: $0, alpha: 1).cgColor }

@@ -10,9 +10,7 @@ import UIKit
 
 class ColorPickerViewController: UIViewController {
 
-    override var prefersStatusBarHidden: Bool{
-        return true
-    }
+    override var prefersStatusBarHidden: Bool { return true }
 
     private var hue: CGFloat = 0
     private var saturation: CGFloat = 0
@@ -31,12 +29,11 @@ class ColorPickerViewController: UIViewController {
     @IBOutlet weak var huePicker: HuePicker!
     @IBOutlet weak var colorPicker: ColorPicker!
 
-
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         value = manager.lineColor
-        huePicker.indicator.setCenter(xTo: hue * huePicker.bounds.width)
-        colorPicker.indicator.setCenter(to: CGPoint(x: saturation * colorPicker.bounds.height, y: brightness * colorPicker.bounds.width))
+        huePicker.indicator.setCenterTo(x: hue * huePicker.bounds.width)
+        colorPicker.indicator.setCenterTo(CGPoint(x: saturation * colorPicker.bounds.height, y: brightness * colorPicker.bounds.width))
         colorPicker.hue = hue
     }
 
@@ -51,7 +48,7 @@ class ColorPickerViewController: UIViewController {
         manager.lineColor = value
     }
 
-    func hueValueChanged(){
+    func hueValueChanged() {
         colorPicker.hue = huePicker.value
     }
 
